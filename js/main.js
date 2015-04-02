@@ -86,6 +86,18 @@ window.onload = function() {
 			this.text;
 			this.style;
 			this.people;
+			this.rect;
+			this.beds;
+			this.text2;
+			this.bedXCord=70;
+			this.bedYCord=400;
+			this.xCord=50;
+			this.yCord=100;
+			this.bedsFull=false;
+			this.patientArray=[];
+			this.bedText;
+			this.bedArray=[];
+			this.colorArray=[0x00CC00,0xFFFF00,0xFF6600,0xFF0000]
 		}
 	
 	
@@ -95,8 +107,15 @@ window.onload = function() {
 		preload: function() 
 		{
         //pre-loading the zombies
-			this.load.spritesheet('people', 'assets/people.png');
-			this.game.stage.backgroundColor = '#000000';
+			this.load.spritesheet('people', 'assets/block.png');
+			this.load.spritesheet('beds','assets/bed.png');
+			this.load.spritesheet('redBed','assets/redBed.png');
+			this.load.spritesheet('orangeBed','assets/orangeBed.png');
+			this.load.spritesheet('yellowBed','assets/yellowBed.png');
+			this.load.spritesheet('greenBed','assets/greenBed.png');
+			this.load.spritesheet('rect','assets/rect.png');
+			this.load.spritesheet('bedText','assets/bedText.png')
+			this.game.stage.backgroundColor = '#FFFFFF';
 		},
     
 
@@ -112,62 +131,194 @@ window.onload = function() {
 		
 		//creating the patients
 			this.people = this.add.group();
-		
+			this.people.enableBody=true;
+			//&beds
+			this.beds = this.add.group();
 			
 		//creating 10 patients that show up in a random fashion	
 		
 		
 			this.people.createMultiple(10,"people",0,false);
+			
+			this.beds.createMultiple(4,'beds',0,false)
 			this.game.physics.enable(this.people,Phaser.Physics.ARCADE);
 		
 		//spawning patients			
-			this.resurrect;
-			this.game.time.events.repeat(Phaser.Timer.SECOND*this.rnd.integerInRange(30, 45),10, this.resurrect,this );
+			this.resurrect();
 			
+			//placing 4 beds:
+			this.placeBeds();
+			this.placeBeds();
+			this.placeBeds();
+			this.placeBeds();
+			
+			
+			//window.alert('adfd');
+			this.game.time.events.repeat(Phaser.Timer.SECOND*this.rnd.integerInRange(5, 9),10, this.resurrect,this );
+			
+		//er rect
+			this.rect = this.add.sprite(390, 370, 'rect');
+			this.game.physics.enable(this.rect,Phaser.Physics.ARCADE);
+			this.rect.enableBody=true;
+			//rect.scale.setTo(2.0, 3.0);
 	
-	
+			this.bedText=this.add.sprite(100,480,'bedText');
 		// Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
 			this.style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-			this.text = this.add.text( this.world.centerX, 15, "Don't Let the Monsters Get You!.", this.style );
+			this.text = this.add.text( this.world.centerX, 15, "Welcome to the ER.", this.style );
+	
 			this.text.anchor.setTo( 0.5, 0.0 );
 		
+			
 		
 			this.keys = this.input.keyboard.createCursorKeys();
 		
+		
 			
 		},
 	
+		Bed: function(fullStatus,x,y)
+		{
+			var fullStat;
+			this.fullStat=fullStatus;
+			var bedX,bedY;
+			this.bedX=x;
+			this.bedY=y;
+		},
+		
+		Patient: function(colorStatus)
+		{
+			var status;
+			this.status=colorStatus;
+			
+			//colorStatus: 0=>Green, 1=> Yellow, 2=> Orange, 3=>Red
+			var timer;
+			
+		},
 	
+		placeBeds: function()
+		{
+			var bedItem = this.beds.getFirstDead();
+			if(bedItem)
+			{
+				bedItem.reset(this.bedXCord,this.bedYCord);
+				bedItem=new this.Bed(false,this.bedXCord,this.bedYCord);
+				this.bedArray.push(bedItem);
+			}
+			
+			this.bedXCord=this.bedXCord+50;
+		},
+		
+		changeBedColor: function(bed,color,bedNum)
+		{
+			if(color==3)
+			{
+				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'redBed');
+				this.bedArray[bedNum].fullStat=true;
+			}
+			else if(color==2)
+			{
+				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'orangeBed');
+				this.bedArray[bedNum].fullStat=true;
+			}
+			else if(color==1)
+			{
+				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'yellowBed');
+				this.bedArray[bedNum].fullStat=true;
+			}
+			else if(color==0)
+			{
+				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'greenBed');
+				this.bedArray[bedNum].fullStat=true;
+			}
+		},
+		
+		emptyBed: function()
+		{
+			var i=0;
+			for(i;i<this.bedArray.length;i++)
+			{
+				if(this.bedArray[i].fullStat==false)
+				{
+					return i;
+				}
+			}
+			return false;
+		},
+		
 		resurrect: function()
 		{
 			
-			window.alert('here');
+			
 			
 		 //Get the first not-currently spawned item
 			var item = this.people.getFirstDead();
-			var xCord=50;
-			var yCord=100;
-			var colorArray=[0x00CC00,0xFFFF00,0xFF6600,0xFF0000]
+			
+			
 			
 			if (item)
 			{
+				if(this.xCord>700)
+				{
+					this.yCord=this.yCord+75;
+					this.xCord=55;
+				}
 				//And bring it back to life
-				item.reset(xCord+20, yCord);
-			
-				var colorStatus=this.rnd.integerInRange(0,4);
-				item.tint=colorArray[colorStatus];
+				//window.alert(this.xCord);
+				item.reset(this.xCord+75,this.yCord);
+				this.physics.arcade.enable(item);
+				item.inputEnabled=true;
+				item.input.enableDrag();
+				var colorStatus=this.rnd.integerInRange(0,3);
+				item.tint=this.colorArray[colorStatus];
+				item.exists=true;
+				//window.alert(this.people.getChildIndex(item));
+				item.events.onDragStop.add(this.collisionHandler,this);
+				
+				item=new this.Patient(colorStatus);
+				this.patientArray.push(item);
+				
+				this.xCord=this.xCord+100;
+				
+				
+				
 			}
-
+			//window.alert(this.people.getChildIndex(this.people.cursor));
 			
 		},
 	
+		
+		
 		update: function()
 		{
 			
 			
 		
 		},
+		
+		collisionHandler (item, pointer) 
+		{
+			
+			
+			if(this.physics.arcade.overlap(this.rect,item,null,null,this))
+				{
+					var bedNum=this.emptyBed();
+					
+					if(Number.isInteger(bedNum)!=false)
+					{
+						
+						window.alert(this.patientArray[this.people.getChildIndex(item)].status);
+						this.changeBedColor(this.bedArray[bedNum],this.patientArray[this.people.getChildIndex(item)].status,bedNum);
+						
+						item.exists=false;
+						
+					}
+				}
+			
+
+		},
+
 		
 		goToStateC: function () 
 		{
