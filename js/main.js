@@ -141,7 +141,7 @@ window.onload = function() {
 		resurrect: function()
 		{
 			
-		
+			window.alert('here');
 			
 		 //Get the first not-currently spawned item
 			var item = this.people.getFirstDead();
