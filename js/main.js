@@ -121,6 +121,7 @@ window.onload = function() {
 			this.game.physics.enable(this.people,Phaser.Physics.ARCADE);
 		
 		//spawning patients			
+			this.resurrect;
 			this.game.time.events.repeat(Phaser.Timer.SECOND*this.rnd.integerInRange(30, 45),10, this.resurrect,this );
 			
 	
