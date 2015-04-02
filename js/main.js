@@ -216,47 +216,57 @@ window.onload = function() {
 			
 			if(color==3)
 			{
-				window.alert(bed.bedX);
-				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'redBed');
-				this.bedArray[bedNum].fullStat=true;
+				//window.alert(bed.bedX);
+				this.add.sprite(bed.bedX,bed.bedY,'redBed');
+				
 				var bedItem=new this.Bed(true,bed.bedXCord,bed.bedYCord);
 				this.bedArray[bedNum]=bedItem
-				this.timer.add(Phaser.Timer.SECOND*10,this.clearBed,this,bedNum,bed);
+				
+				this.timer.add(Phaser.Timer.SECOND*30,this.clearBed,this,bedNum,bed);
 				this.timer.start();
 			}
 			else if(color==2)
 			{
-				window.alert(bed.bedX);
-				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'orangeBed');
-				this.bedArray[bedNum].fullStat=true;
+				//window.alert(bed.bedX);
+				this.add.sprite(bed.bedX,bed.bedY,'orangeBed');
+				
 				var bedItem=new this.Bed(true,bed.bedXCord,bed.bedYCord);
 				this.bedArray[bedNum]=bedItem
+				
+				this.timer.add(Phaser.Timer.SECOND*20,this.clearBed,this,bedNum,bed);
+				this.timer.start();
 			}
 			else if(color==1)
 			{
-				window.alert(bed.bedX);
-				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'yellowBed');
-				this.bedArray[bedNum].fullStat=true;
+				//window.alert(bed.bedX);
+				this.add.sprite(bed.bedX,bed.bedY,'yellowBed');
+				
 				var bedItem=new this.Bed(true,bed.bedXCord,bed.bedYCord);
 				this.bedArray[bedNum]=bedItem
+				
+				this.timer.add(Phaser.Timer.SECOND*15,this.clearBed,this,bedNum,bed);
+				this.timer.start();
 			}
 			else if(color==0)
 			{
-				window.alert(bed.bedX);
-				this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'greenBed');
-				this.bedArray[bedNum].fullStat=true;
+				//window.alert(bed.bedX);
+				this.add.sprite(bed.bedX,bed.bedY,'greenBed');
+				
 				var bedItem=new this.Bed(true,bed.bedXCord,bed.bedYCord);
 				this.bedArray[bedNum]=bedItem
+				
+				this.timer.add(Phaser.Timer.SECOND*10,this.clearBed,this,bedNum,bed);
+				this.timer.start();
 			}
 		},
 		
 		clearBed: function(bedNum,bed)
 		{
-			window.alert('here');
-			this.bedArray[bedNum]=this.add.sprite(bed.bedX,bed.bedY,'beds');
-			this.bedArray[bedNum].fullStat=false;
 			
-			var bedItem=new this.Bed(false,bed.bedXCord,bed.bedYCord);
+			this.add.sprite(bed.bedX,bed.bedY,'beds');
+			
+			
+			var bedItem=new this.Bed(false,bed.bedX,bed.bedY);
 			this.bedArray[bedNum]=bedItem
 		},
 		emptyBed: function()
@@ -276,7 +286,7 @@ window.onload = function() {
 		{
 			
 			
-			
+			this.timer = this.game.time.create(this.game);
 		 //Get the first not-currently spawned item
 			var item = this.people.getFirstDead();
 			
@@ -306,14 +316,42 @@ window.onload = function() {
 				
 				this.xCord=this.xCord+100;
 				
+				if(colorStatus==3)
+				{
+					window.alert('1');
+					this.timer.add(Phaser.Timer.SECOND*15,this.diePatient,this,item);
+					this.timer.start();
+				}
 				
+				if(colorStatus==2)
+				{
+					this.timer.add(Phaser.Timer.SECOND*20,this.diePatient,this,item);
+					this.timer.start();
+				}
+				
+				if(colorStatus==1)
+				{
+					this.timer.add(Phaser.Timer.SECOND*30,this.diePatient,this,item);
+					this.timer.start();
+				}
+				
+				if(colorStatus==0)
+				{
+					this.timer.add(Phaser.Timer.SECOND*40,this.diePatient,this,item);
+					this.timer.start();
+				}
 				
 			}
 			//window.alert(this.people.getChildIndex(this.people.cursor));
 			
 		},
 	
-		
+		diePatient: function(patient,pointer)
+		{
+			//window.alert(this.people.getChildIndex(patient));
+			patient.exists=false;
+			patient.visible=false;
+		},
 		
 		update: function()
 		{
@@ -329,10 +367,10 @@ window.onload = function() {
 			if(this.physics.arcade.overlap(this.rect,item,null,null,this))
 				{
 					var bedNum=this.emptyBed();
-					window.alert(bedNum);
+					//window.alert(bedNum);
 					if(Number.isInteger(bedNum)!=false)
 					{
-						window.alert(bedNum);
+						//window.alert(bedNum);
 						//window.alert(this.patientArray[this.people.getChildIndex(item)].status);
 						this.changeBedColor(this.bedArray[bedNum],this.patientArray[this.people.getChildIndex(item)].status,bedNum);
 						
