@@ -274,7 +274,7 @@ window.onload = function() {
 	game.state.add('StateB', P2Game.StateB);
 	game.state.add('StateC', P2Game.StateC);
 	game.state.add('StateD', P2Game.StateD);
-	game.state.start('StateA');
+	//game.state.start('StateA');
     
     
  };
