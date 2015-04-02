@@ -134,7 +134,7 @@ window.onload = function() {
 		
 			this.keys = this.input.keyboard.createCursorKeys();
 		
-			Window.alert('hello?');
+			
 		},
 	
 	
