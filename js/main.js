@@ -318,7 +318,7 @@ window.onload = function() {
 				
 				if(colorStatus==3)
 				{
-					window.alert('1');
+					//window.alert('1');
 					this.timer.add(Phaser.Timer.SECOND*15,this.diePatient,this,item);
 					this.timer.start();
 				}
