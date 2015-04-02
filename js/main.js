@@ -123,16 +123,9 @@ window.onload = function() {
 		//spawning patients			
 			this.game.time.events.repeat(Phaser.Timer.SECOND*this.rnd.integerInRange(30, 45),10, this.resurrect,this );
 			
- 
-        //getting the key to move around and bounce
-			this.key.body.collideWorldBounds=true;
-			this.key.body.velocity.setTo(200,200);
-			
-			this.physics.arcade.collide(this.mummies,this.key);
-			this.key.body.bounce.set(1);
 	
 	
-			// Add some text using a CSS style.
+		// Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
 			this.style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
 			this.text = this.add.text( this.world.centerX, 15, "Don't Let the Monsters Get You!.", this.style );
@@ -141,7 +134,7 @@ window.onload = function() {
 		
 			this.keys = this.input.keyboard.createCursorKeys();
 		
-			
+			Window.alert('hello?');
 		},
 	
 	
