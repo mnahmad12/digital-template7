@@ -270,7 +270,7 @@ window.onload = function() {
 	
 	var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game' );
     
-	game.state.add('StateA', P2Game.StateA);
+	//game.state.add('StateA', P2Game.StateA);
 	game.state.add('StateB', P2Game.StateB);
 	game.state.add('StateC', P2Game.StateC);
 	game.state.add('StateD', P2Game.StateD);
